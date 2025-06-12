@@ -1,0 +1,51 @@
+package com.todo.controllers;
+
+import com.todo.data.Task;
+import com.todo.services.TaskService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(TaskController.class)
+class TaskControllerTest {
+    @Autowired
+    MockMvc mockMvc;
+
+    @MockitoBean
+    TaskService taskService;
+
+    @Test
+    void shouldReturnEmptyArrayIfThereAreNoTasks() throws Exception {
+        when(taskService.getAllTasks()).thenReturn(new ArrayList<>());
+        var task = new Task(1, "hello", false);
+
+        task.getDescription();
+
+        mockMvc.perform(get("/tasks"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void shouldReturnAllTasks() throws Exception {
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(new Task(0, "Mock Task", false));
+
+        when(taskService.getAllTasks()).thenReturn(tasks);
+        mockMvc.perform(get("/tasks").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("[{\"id\": 0, \"description\": \"Mock Task\", \"done\": false}]"));
+    }
+}
