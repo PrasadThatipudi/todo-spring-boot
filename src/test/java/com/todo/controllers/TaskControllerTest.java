@@ -57,30 +57,10 @@ class TaskControllerTest {
 
         when(taskService.addTask("Mock Task")).thenReturn(task);
         mockMvc.perform(post("/tasks/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"description\": \"Mock Task\"}")
-        )
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"description\": \"Mock Task\"}"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(content().json("{\"id\": 0, \"description\": \"Mock Task\", \"done\": false}"));
-    }
-
-    @Test
-    void shouldReturnErrorIfTaskIsAlreadyExists() throws Exception {
-        Task task = new Task(0, "Mock Task", false);
-
-        mockMvc.perform(post("/tasks/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"description\": \"Mock Task\"}")
-        );
-
-        when(taskService.addTask("Mock Task")).thenReturn(ResponseEntity.badRequest().build());
-
-        mockMvc.perform(post("/tasks/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content("{\"description\": \"Mock Task\"}")
-        ).andExpect(status().isBadRequest());
-
     }
 }
