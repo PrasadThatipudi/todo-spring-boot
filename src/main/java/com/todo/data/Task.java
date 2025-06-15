@@ -16,7 +16,7 @@ public class Task {
 
     private final int id;
     private final String description;
-    private final boolean done;
+    private boolean done;
 
     @Override
     public boolean equals(Object o) {
@@ -28,5 +28,11 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(id, description, done);
+    }
+
+    public Task toggleTaskStatus() {
+        done = !done;
+
+        return this;
     }
 }

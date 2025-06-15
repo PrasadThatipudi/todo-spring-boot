@@ -54,4 +54,13 @@ class TaskServiceTest {
 
         assertEquals(2, taskService.getAllTasks().size());
     }
+
+    @Test
+    void shouldToggleTaskStatus() {
+        TaskService taskService = new TaskService();
+        Task task = taskService.addTask("Task-1");
+        taskService.toggleTaskStatus(0);
+
+        assert(task.isDone());
+    }
 }

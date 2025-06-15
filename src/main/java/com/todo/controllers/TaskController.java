@@ -3,11 +3,7 @@ package com.todo.controllers;
 import com.todo.data.Task;
 import com.todo.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class TaskController {
@@ -20,8 +16,13 @@ public class TaskController {
         return taskService.getAllTasks();
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/tasks/add")
+    @PostMapping("/tasks/add")
     public Task addTask() {
         return taskService.addTask("Mock Task");
+    }
+
+    @PatchMapping("/tasks/{id}/status")
+    public Task toggleTaskStatus(@PathVariable Long id) {
+        return taskService.toggleTaskStatus(0);
     }
 }

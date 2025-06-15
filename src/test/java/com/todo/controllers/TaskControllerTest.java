@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,5 +61,17 @@ class TaskControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(content().json("{\"id\": 0, \"description\": \"Mock Task\", \"done\": false}"));
+    }
+
+    @Test
+    void shouldUpdateTaskStatus() throws Exception {
+        Task task = new Task(0, "Mock Task", true);
+
+        taskService.addTask("Mock Task");
+        when(taskService.toggleTaskStatus(0)).thenReturn(task);
+        mockMvc.perform(patch("/tasks/0/status"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("{\"id\": 0, \"description\": \"Mock Task\" , \"done\": true}"));
     }
 }
