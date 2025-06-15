@@ -8,17 +8,24 @@ import java.util.ArrayList;
 
 @Service
 public class TaskService {
-        ArrayList<Task> tasks = new ArrayList<>();
-    public ArrayList getAllTasks() {
-        tasks.add(new Task(0, "Read Books", false));
+    ArrayList<Task> tasks = new ArrayList<>();
+    private int currentTaskId = -1;
 
+    public ArrayList getAllTasks() {
         return tasks;
     }
 
     public Task addTask(String description){
-        if(hasTask(description)) throw new IllegalArgumentException("Description already exists");
+        Task newTask = new Task(nextTaskId(), description, false);
+        tasks.add(newTask);
 
-        return new Task(0, description, false);
+        return newTask;
+    }
+
+    private int nextTaskId() {
+        currentTaskId += 1;
+
+        return currentTaskId;
     }
 
     private boolean hasTask(String description) {
