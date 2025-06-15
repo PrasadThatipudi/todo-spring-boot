@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,5 +49,38 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("[{\"id\": 0, \"description\": \"Mock Task\", \"done\": false}]"));
+    }
+
+    @Test
+    void shouldAddTask() throws Exception {
+        Task task = new Task(0, "Mock Task", false);
+
+        when(taskService.addTask("Mock Task")).thenReturn(task);
+        mockMvc.perform(post("/tasks/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"description\": \"Mock Task\"}")
+        )
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(content().json("{\"id\": 0, \"description\": \"Mock Task\", \"done\": false}"));
+    }
+
+    @Test
+    void shouldReturnErrorIfTaskIsAlreadyExists() throws Exception {
+        Task task = new Task(0, "Mock Task", false);
+
+        mockMvc.perform(post("/tasks/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"description\": \"Mock Task\"}")
+        );
+
+        when(taskService.addTask("Mock Task")).thenReturn(ResponseEntity.badRequest().build());
+
+        mockMvc.perform(post("/tasks/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{\"description\": \"Mock Task\"}")
+        ).andExpect(status().isBadRequest());
+
     }
 }

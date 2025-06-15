@@ -15,4 +15,8 @@ public class TaskService {
 
         return tasks;
     }
+
+    public Object addTask(String description) {
+        return null;
+    }
 }
