@@ -25,4 +25,9 @@ public class TaskController {
     public Task toggleTaskStatus(@PathVariable Long id) {
         return taskService.toggleTaskStatus(0);
     }
+
+    @DeleteMapping("/tasks/{id}")
+    public Task deleteTask(@PathVariable Long id) {
+        return taskService.deleteTask(0);
+    }
 }

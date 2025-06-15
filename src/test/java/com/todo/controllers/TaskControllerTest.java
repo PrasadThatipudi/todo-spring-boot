@@ -74,4 +74,15 @@ class TaskControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("{\"id\": 0, \"description\": \"Mock Task\" , \"done\": true}"));
     }
+
+    @Test
+    void shouldDeleteTask() throws Exception {
+        Task mockTask = new Task(0, "Mock Task", false);
+        taskService.addTask("Mock Task");
+
+        when(taskService.deleteTask(0)).thenReturn(mockTask);
+        mockMvc.perform(delete("/tasks/0"))
+                .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
 }

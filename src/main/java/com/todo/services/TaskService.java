@@ -27,10 +27,6 @@ public class TaskService {
         return currentTaskId;
     }
 
-    private boolean hasTask(String description) {
-        return tasks.stream().anyMatch(task -> task.getDescription().equals(description));
-    }
-
     private Task getTaskById(int taskId) {
         return tasks.stream().filter(task -> task.getId() == taskId).findFirst().orElse(null);
     }
@@ -39,5 +35,12 @@ public class TaskService {
         Task task = getTaskById(taskId);
 
         return task.toggleTaskStatus();
+    }
+
+    public Task deleteTask(int taskId) {
+        Task targetTask = getTaskById(taskId);
+
+        tasks.remove(targetTask);
+        return targetTask;
     }
 }

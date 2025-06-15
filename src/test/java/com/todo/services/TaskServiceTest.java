@@ -63,4 +63,14 @@ class TaskServiceTest {
 
         assert(task.isDone());
     }
+
+    @Test
+    void shouldDeleteTask() {
+        TaskService taskService = new TaskService();
+
+        Task addedTask = taskService.addTask("Task-1");
+        Task deletedTask = taskService.deleteTask(0);
+
+        assertEquals(addedTask, deletedTask);
+    }
 }
