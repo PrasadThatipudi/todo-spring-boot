@@ -37,6 +37,17 @@ class TaskServiceTest {
     }
 
     @Test
+    void shouldAddTaskWithDifferentId() {
+        TaskService taskService = new TaskService();
+
+        Task task1 = taskService.addTask("Task-1");
+        Task task2 = taskService.addTask("Task-2");
+
+        assertEquals(new Task(0, "Task-1", false), task1);
+        assertEquals(new Task(1, "Task-2", false), task2);
+    }
+
+    @Test
     void serviceShouldNotContainMoreThanOneTaskAfterAddingOneTask() {
         TaskService taskService = new TaskService();
         Task task = taskService.addTask("Task-1");
@@ -50,7 +61,6 @@ class TaskServiceTest {
 
         taskService.addTask("Task-1");
         taskService.addTask("Task-2");
-
 
         assertEquals(2, taskService.getAllTasks().size());
     }
