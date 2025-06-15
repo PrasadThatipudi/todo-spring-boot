@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 @Service
 public class TaskService {
-    ArrayList<Task> tasks = new ArrayList<>();
+    private ArrayList<Task> tasks = new ArrayList<>();
     private int currentTaskId = -1;
 
     public ArrayList getAllTasks() {
